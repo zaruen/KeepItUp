@@ -18,6 +18,9 @@ public class Ball : MonoBehaviour
 	static Ball pthis;
 	public AudioSource asource;
 	public AudioClip kick, bounce;
+
+	public int xForceDirection;
+	public int yForceDirection;
 	
 	void playSound(AudioClip c)
 	{
@@ -41,7 +44,7 @@ public class Ball : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		pthis = this;
 		
-		rb.AddForce(new Vector2(0f,1000f));
+		rb.AddForce(new Vector2(0f,yForceDirection));
 	}
 	
 	public Vector2 getPosition()
@@ -91,11 +94,13 @@ public class Ball : MonoBehaviour
 			return;
 			
 		//tap too far
+//		Debug.Log ("rb2 position: "+rb2.position);
+//		Debug.Log ("distance bwtn tap and rb2: "+Lib.pythag(tappos,rb2.position));
 		if (Lib.pythag(tappos,rb2.position)>=0.8f)
 			return;
 		
 		float dx = -(tappos.x - rb2.position.x) * 500f;
-		rb2.AddForce(new Vector2(dx,1500f));
+		rb2.AddForce(new Vector2(dx * xForceDirection, yForceDirection * 1f));
 		
 		screen_game game = screen_game.GetInstance();
 		game.doCollision(tappos);

@@ -34,7 +34,7 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
 	public bool isGameOver()	{return state==STATE.GAMEOVER;}
 	public bool isPaused()		{return state==STATE.PAUSED;}
-	bool isPlaying()		{return state==STATE.PLAYING;}
+	public bool isPlaying()		{return state==STATE.PLAYING;}
 	
 	static screen_game pthis;
 	public static screen_game GetInstance() {return pthis;}
@@ -87,7 +87,7 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		
 		updateDisplay();
 		
-		SimpleAdScript.GetInstance().showInterstitialAd();
+		//SimpleAdScript.GetInstance().showInterstitialAd();
 	}
 	
 	Vector3 posstart;
@@ -201,7 +201,9 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (isGameOver())
 			return;
 			
+//		Debug.Log ("raw position: " + e.position);
 		Vector2 tappos = transScreenPosToRigidBodySpace(e.position);
+//		Debug.Log ("Processed position: " + tappos);
 		Ball.GetInstance().kickMe(tappos);
 		//doCollision(tappos);
 	}

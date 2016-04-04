@@ -49,8 +49,9 @@ public class SHARED /*: UnityEngine.Object */{
 		if (bhasprep)
 			return;
 		bhasprep = true;
-		if (Application.platform == RuntimePlatform.IPhonePlayer)
-			System.Environment.SetEnvironmentVariable ("MONO_REFLECTION_SERIALIZER", "yes");
+		if (Application.platform == RuntimePlatform.IPhonePlayer){
+			//System.Environment.SetEnvironmentVariable ("MONO_REFLECTION_SERIALIZER", "yes");
+		}
 	}
 	
 	public bool save()

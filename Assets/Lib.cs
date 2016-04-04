@@ -10,7 +10,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 //using System.Collections;
 //using System.Collections.Generic;
@@ -198,13 +198,13 @@ return a + (b-a)*t;
 	
 	public static string GetCurrentSceneName()
 	{
-		return Application.loadedLevelName;
+		return SceneManager.GetActiveScene().name;
 	}
 	
 	//loads the level. returns when level is loaded
 	public static void LoadSceneSync(string levelname)
 	{
-		Application.LoadLevel(levelname);
+		SceneManager.LoadScene(levelname);
 	}
 	
 	public static void LoadScene(string levelname)
@@ -214,7 +214,7 @@ return a + (b-a)*t;
 		
 		private static IEnumerator LoadSceneInternal(string levelname)
 		{
-			AsyncOperation asyncOp = Application.LoadLevelAsync(levelname);
+			AsyncOperation asyncOp = SceneManager.LoadSceneAsync(levelname);
 			if (asyncOp==null)
 				goto done;
 			
@@ -231,7 +231,7 @@ return a + (b-a)*t;
 
 	public static void ReloadScene()
 	{
-		Application.LoadLevel(Application.loadedLevel);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	public static void Fade(Image g, COL c0, COL c1, int duration)
