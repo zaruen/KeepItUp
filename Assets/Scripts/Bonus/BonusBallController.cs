@@ -4,17 +4,26 @@ using System.Collections;
 
 public class BonusBallController : MonoBehaviour
 {
-	public float visibleTime;
+	public float visibleTime = 2;
+	public float effectDuration = 5;
 	public Text timerTextPrefab;
+	//public Ball ball;
+
 
 	private float timeLeft;
 	private Text timerTextInstance;
+	private Renderer rend;
+
+	protected bool isEffectOn = false;
 
 	// Use this for initialization
 	void Start ()
 	{
+		
+
 		timeLeft = visibleTime;
 		timerTextInstance = Instantiate (timerTextPrefab);
+		rend = GetComponent<Renderer> ();
 	}
 	
 	// Update is called once per frame
@@ -26,7 +35,7 @@ public class BonusBallController : MonoBehaviour
 	void FixedUpdate(){
 		
 		timeLeft -= Time.deltaTime;
-		if (timeLeft < 0) {
+		if (timeLeft < 0 && !isEffectOn) {
 			timeLeft = 0;
 			Destroy (timerTextInstance.gameObject);
 			Destroy (this.gameObject);
@@ -41,18 +50,17 @@ public class BonusBallController : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D other){
 		if (other.gameObject.CompareTag("player")) {
-			Destroy (this.gameObject);
-			StartCoroutine (DoubleSize(other.gameObject));
+			rend.enabled = false;
+			isEffectOn = true;
+			StartCoroutine (ApplyEffect(other.gameObject));
 		}
 	}
 
-	IEnumerator DoubleSize(GameObject gameObj){
-		Debug.Log ("Double Size");
-		var initialScale = gameObj.transform.localScale;
-		gameObj.transform.localScale = new Vector3(2f,2f,0f);
-		yield return new WaitForSeconds (1.0f);
-		gameObj.transform.localScale = initialScale;
-		Debug.Log ("End Double Size");
+	protected virtual IEnumerator ApplyEffect(GameObject gameObj){
+		Debug.Log ("Default ApplyEffect");
+		yield return new WaitForSeconds (effectDuration);
+		isEffectOn = false;
+		Destroy (this.gameObject);
 	}
 }
 
