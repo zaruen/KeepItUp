@@ -22,6 +22,7 @@ public class BonusController : MonoBehaviour {
 	public GameObject bonusBallBig;
 	public GameObject bonusBallSmall;
     public GameObject bonusGravityLow;
+	public GameObject bonusGravityHigh;
 
 	private float maxWidth;
 	private float maxHeight;
@@ -72,7 +73,6 @@ public class BonusController : MonoBehaviour {
 		    bonusCreatedController.ball = ball;
 
 			yield return new WaitForSeconds (Random.Range (visibleTime + timeBetweenBonus, visibleTime + timeBetweenBonus + 10.0f));
-			//yield return new WaitForSeconds (Random.Range (1.0f, 2.0f));
 		}
 	}
 
@@ -80,26 +80,21 @@ public class BonusController : MonoBehaviour {
 		var random = Random.Range (0, 100);
 		Debug.Log ("random " + random);
 
-	    if (random > 30 && random <= 60)
+	    if (random > 25 && random <= 50)
 	    {
-            return bonusGravityLow;
+            return bonusGravityHigh;
 	    }
-		if (random <= 30) {
+		if (random > 50 && random <= 75)
+		{
+			return bonusGravityLow;
+		}
+		if (random <= 25) {
             return bonusBallBig;
 		}
-		if (random > 60) {
+		if (random > 75) {
             return bonusBallSmall;
 		}
 
 		return bonusBallBig;
-
-//		switch (random) {
-//			case 0:
-//				return bonusBallBig;
-//			case 1:
-//				return bonusBallSmall;
-//			default:
-//				return bonusBallBig;
-//		}
 	}
 }

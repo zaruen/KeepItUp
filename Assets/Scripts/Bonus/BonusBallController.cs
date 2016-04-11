@@ -9,6 +9,7 @@ public class BonusBallController : MonoBehaviour
 	public Text timerTextPrefab;
 	public Ball ball;
 
+	protected Rigidbody2D rb2d;
 
 	private float timeLeft;
 	private Text timerTextInstance;
@@ -19,8 +20,7 @@ public class BonusBallController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		
-
+		rb2d = ball.GetComponent<Rigidbody2D>();
 		timeLeft = visibleTime;
 		timerTextInstance = Instantiate (timerTextPrefab);
 		rend = GetComponent<Renderer> ();
@@ -49,6 +49,8 @@ public class BonusBallController : MonoBehaviour
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
+		if (isEffectOn)
+			return;
 		if (other.gameObject.CompareTag("player")) {
 			rend.enabled = false;
 			isEffectOn = true;
@@ -61,6 +63,12 @@ public class BonusBallController : MonoBehaviour
 		yield return new WaitForSeconds (effectDuration);
 		isEffectOn = false;
 		Destroy (this.gameObject);
+	}
+
+	protected void BonusPunch(){
+		if (rb2d.velocity.y >= 0)
+			return;
+		rb2d.AddForce(new Vector2(0f,ball.yForceDirection));
 	}
 }
 

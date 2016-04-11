@@ -7,7 +7,7 @@ public class GravityLow : BonusBallController
     protected override IEnumerator ApplyEffect(GameObject gameObj){
 		Debug.Log ("Low grav");
 
-        var rb2d = ball.GetComponent<Rigidbody2D>();
+		BonusPunch ();
         var initialGravityScale = rb2d.gravityScale;
         var initialYForce = ball.yForceDirection;
 
@@ -15,11 +15,14 @@ public class GravityLow : BonusBallController
 
         yield return new WaitForSeconds (effectDuration);
 
-        SetGravity(rb2d, initialGravityScale, initialYForce);
+		if (rb2d != null) {
+			SetGravity(rb2d, initialGravityScale, initialYForce);
+			BonusPunch ();
 
-		Debug.Log ("End low grav");
-		isEffectOn = false;
-		Destroy (this.gameObject);
+			Debug.Log ("End low grav");
+			isEffectOn = false;
+			Destroy (this.gameObject);
+		}
 	}
 
     private void SetGravity(Rigidbody2D rb2d, float gravityScale, int yForceDirection)

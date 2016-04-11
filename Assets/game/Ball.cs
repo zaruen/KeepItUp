@@ -21,6 +21,7 @@ public class Ball : MonoBehaviour
 
 	public int xForceDirection;
 	public int yForceDirection;
+	public int tapTolerance = 1;
 	
 	void playSound(AudioClip c)
 	{
@@ -96,7 +97,7 @@ public class Ball : MonoBehaviour
 		//tap too far
 //		Debug.Log ("rb2 position: "+rb2.position);
 //		Debug.Log ("distance bwtn tap and rb2: "+Lib.pythag(tappos,rb2.position));
-		if (Lib.pythag(tappos,rb2.position)>=0.8f)
+		if (Lib.pythag(tappos,rb2.position)>=0.8f * tapTolerance)
 			return;
 		
 		float dx = -(tappos.x - rb2.position.x) * 500f;
