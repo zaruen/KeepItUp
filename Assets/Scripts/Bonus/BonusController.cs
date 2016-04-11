@@ -17,8 +17,11 @@ public class BonusController : MonoBehaviour {
 	[Range(0,1)]
 	public float bonusAreaWideness;
 
-	public GameObject bonusBigBall;
-	public GameObject bonusSmallBall;
+    public Ball ball;
+
+	public GameObject bonusBallBig;
+	public GameObject bonusBallSmall;
+    public GameObject bonusGravityLow;
 
 	private float maxWidth;
 	private float maxHeight;
@@ -31,7 +34,7 @@ public class BonusController : MonoBehaviour {
 			cam = Camera.main;
 		}
 			
-		rend = bonusBigBall.GetComponent<Renderer> ();
+		rend = bonusBallBig.GetComponent<Renderer> ();
 
 		SetBonusArea (rend);
 
@@ -64,7 +67,9 @@ public class BonusController : MonoBehaviour {
 
 			var bonus = SelectBonusToCreate ();
 
-			Instantiate (bonus, spawnPosition, spawnRotation);
+			var bonusCreated = (GameObject) Instantiate (bonus, spawnPosition, spawnRotation);
+		    var bonusCreatedController = bonusCreated.GetComponent<BonusBallController>();
+		    bonusCreatedController.ball = ball;
 
 			yield return new WaitForSeconds (Random.Range (visibleTime + timeBetweenBonus, visibleTime + timeBetweenBonus + 10.0f));
 			//yield return new WaitForSeconds (Random.Range (1.0f, 2.0f));
@@ -72,25 +77,29 @@ public class BonusController : MonoBehaviour {
 	}
 
 	GameObject SelectBonusToCreate(){
-		var random = Random.Range (0, 10);
+		var random = Random.Range (0, 100);
 		Debug.Log ("random " + random);
 
-		if (random <= 5) {
-			return bonusBigBall;
+	    if (random > 30 && random <= 60)
+	    {
+            return bonusGravityLow;
+	    }
+		if (random <= 30) {
+            return bonusBallBig;
 		}
-		if (random > 5) {
-			return bonusSmallBall;
+		if (random > 60) {
+            return bonusBallSmall;
 		}
 
-		return bonusBigBall;
+		return bonusBallBig;
 
 //		switch (random) {
 //			case 0:
-//				return bonusBigBall;
+//				return bonusBallBig;
 //			case 1:
-//				return bonusSmallBall;
+//				return bonusBallSmall;
 //			default:
-//				return bonusBigBall;
+//				return bonusBallBig;
 //		}
 	}
 }

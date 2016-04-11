@@ -7,7 +7,7 @@ public class BonusBallController : MonoBehaviour
 	public float visibleTime = 2;
 	public float effectDuration = 5;
 	public Text timerTextPrefab;
-	//public Ball ball;
+	public Ball ball;
 
 
 	private float timeLeft;
