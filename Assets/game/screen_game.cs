@@ -15,10 +15,12 @@ using UnityEngine.EventSystems;
 public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler  {
 	
 	public SpriteRenderer rootsprite;
-	public Text hiscore, score;
+	public Text hiscore, score, coinsCount;
 	public Button pausebtn, closebtn;
 	public Image gameover, go, paused;
 	public GameObject ExplosionPrefab;
+
+	public int recentCoins;
 	
 	enum STATE {
 		GAMEOVER,
@@ -74,8 +76,13 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		SHARED s = SHARED.GetInstance();
 		if (s.data.score > s.data.hiscore) {
 			s.data.hiscore = s.data.score;
-			s.save();
 			bHiScore = true;
+		}
+
+		s.data.coins += recentCoins;
+
+		if (bHiScore || recentCoins > 0) {
+			s.save();
 		}
 		
 		if (Lib.debug_invincible)
@@ -108,6 +115,7 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		SHARED s = SHARED.GetInstance();
 		hiscore.text = "Hiscore : " + Lib.ConvNumtoStrThousandSep(s.data.hiscore);
 		score.text = "Score : " + Lib.ConvNumtoStrThousandSep(s.data.score);
+		coinsCount.text = "Coins : " + recentCoins;
 		
 		bool b = Lib.fpart(Time.timeSinceLevelLoad) >= .4f;
 		if (isGameOver())
@@ -163,12 +171,12 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		
 		SHARED s = SHARED.GetInstance();
 		s.data.score = 0;
+		recentCoins = 0;
 		
 		bIntroIsVisible = true;
 		updateDisplay();
 		StartCoroutine(co_updateDisplay());
-		//StartCoroutine(co_generateBaddies());
-		//Ship.StartGeneratingShips();
+
 	}
 	
 	IEnumerator co_updateDisplay()

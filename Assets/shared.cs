@@ -27,7 +27,7 @@ public class SHARED /*: UnityEngine.Object */{
 	
 	[System.Serializable]
 	public struct SHARED_DATA {
-		public Int64 score, hiscore;
+		public Int64 score, hiscore, coins;
 	};
 	public SHARED_DATA data;
 	
@@ -93,6 +93,7 @@ public class SHARED /*: UnityEngine.Object */{
 	{
 		data.score = 0;
 		data.hiscore = 0;
+		data.coins = 0;
 	}
 		
 	bool loadInternal()

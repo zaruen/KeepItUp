@@ -11,8 +11,8 @@ public class BonusController : MonoBehaviour {
 	
 	public Camera cam;
 	public screen_game screenController;
-	public float timeBetweenBonus;
-	public float visibleTime;
+	public float timeBetweenCoin;
+	public float coinVisibleTime;
 	public float bonusDuration;
 	[Range(0,1)]
 	public float bonusAreaWideness;
@@ -23,6 +23,8 @@ public class BonusController : MonoBehaviour {
 	public GameObject bonusBallSmall;
     public GameObject bonusGravityLow;
 	public GameObject bonusGravityHigh;
+
+	public GameObject coinPrefab;
 
 	private float maxWidth;
 	private float maxHeight;
@@ -39,8 +41,8 @@ public class BonusController : MonoBehaviour {
 
 		SetBonusArea (rend);
 
-		Debug.Log ("Start spawning");
-		StartCoroutine (Spawn ());
+//		Debug.Log ("Start spawning");
+		StartCoroutine (SpawnCoin ());
 	}
 
 	private void SetBonusArea(Renderer renderer){
@@ -54,7 +56,7 @@ public class BonusController : MonoBehaviour {
 		maxHeight = (targetDimension.y - ballHeight);
 	}
 
-	IEnumerator Spawn(){
+	IEnumerator SpawnBonus(){
 		yield return new WaitForSeconds (2.0f);
 		//playing = true;
 		while (screenController.isPlaying()) {
@@ -72,7 +74,25 @@ public class BonusController : MonoBehaviour {
 		    var bonusCreatedController = bonusCreated.GetComponent<BonusBallController>();
 		    bonusCreatedController.ball = ball;
 
-			yield return new WaitForSeconds (Random.Range (visibleTime + timeBetweenBonus, visibleTime + timeBetweenBonus + 10.0f));
+			yield return new WaitForSeconds (Random.Range (coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 10.0f));
+		}
+	}
+
+	IEnumerator SpawnCoin(){
+		//yield return new WaitForSeconds (5.0f);
+		while (screenController.isPlaying ()) {
+			Vector3 spawnPosition = new Vector3 (
+				Random.Range(-maxWidth, maxWidth), 
+				Random.Range(-maxHeight, maxHeight), 
+				0f
+			);
+
+			Quaternion spawnRotation = Quaternion.identity;
+
+			Instantiate (coinPrefab, spawnPosition, spawnRotation);
+
+			yield return new WaitForSeconds (Random.Range (coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 10.0f));
+
 		}
 	}
 
