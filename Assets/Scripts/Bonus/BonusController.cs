@@ -91,7 +91,7 @@ public class BonusController : MonoBehaviour {
 
 			Instantiate (coinPrefab, spawnPosition, spawnRotation);
 
-			yield return new WaitForSeconds (Random.Range (coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 10.0f));
+			yield return new WaitForSeconds (Random.Range (coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 1.0f));
 
 		}
 	}
