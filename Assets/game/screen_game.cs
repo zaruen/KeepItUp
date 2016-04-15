@@ -15,10 +15,14 @@ using UnityEngine.EventSystems;
 public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler  {
 	
 	public SpriteRenderer rootsprite;
-	public Text hiscore, score, coinsCount;
+	public Text hiscore, score, coinsCount, newScore, bestScore, totalCoins;
 	public Button pausebtn, closebtn;
 	public Image gameover, go, paused;
 	public GameObject ExplosionPrefab;
+
+    public GameObject endPanel;
+
+    public GameObject endGamePanel;
 
 	public int recentCoins;
 	
@@ -81,6 +85,8 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
 		s.data.coins += recentCoins;
 
+        DisplayEndPanel();
+
 		if (bHiScore || recentCoins > 0) {
 			s.save();
 		}
@@ -96,8 +102,20 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		
 		//SimpleAdScript.GetInstance().showInterstitialAd();
 	}
-	
-	Vector3 posstart;
+
+    private void DisplayEndPanel()
+    {
+        SHARED s = SHARED.GetInstance();
+        newScore.text = Lib.ConvNumtoStrThousandSep(s.data.score);
+        bestScore.text = Lib.ConvNumtoStrThousandSep(s.data.hiscore);
+        totalCoins.text = Lib.ConvNumtoStrThousandSep(s.data.coins);
+        endGamePanel.SetActive(true);
+
+        var rectTransform = coinsCount.GetComponent<RectTransform>();
+        Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(200, 0, 0), 3000);
+    }
+
+    Vector3 posstart;
 	float timeGameOver;
 	void setState_gameOver()
 	{
@@ -156,6 +174,11 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		setState_togglePause();
 		updateDisplay();
 	}
+
+    public void OnButtonPress_Play()
+    {
+        endGamePanel.SetActive(false);
+    }
 	
 	void Awake()
 	{
