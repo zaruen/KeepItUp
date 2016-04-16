@@ -16,13 +16,16 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	
 	public SpriteRenderer rootsprite;
 	public Text hiscore, score, coinsCount, newScore, bestScore, totalCoins;
-	public Button pausebtn, closebtn;
+	public Button pausebtn, closebtn, bagBtn, dinoBtn;
 	public Image gameover, go, paused;
 	public GameObject ExplosionPrefab;
 
     public GameObject endPanel;
+	private Vector3 END_PANEL_VISIBLE_POSITION = new Vector3(0,-100,0);
+	private Vector3 END_PANEL_HIDDEN_POSITION = new Vector3(0,-1000,0);
 
-    public GameObject endGamePanel;
+	public GameObject topPanel;
+
 
 	public int recentCoins;
 	
@@ -86,6 +89,8 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		s.data.coins += recentCoins;
 
         DisplayEndPanel();
+		DisplayEndButtons ();
+		HideTopPanel ();
 
 		if (bHiScore || recentCoins > 0) {
 			s.save();
@@ -109,11 +114,24 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         newScore.text = Lib.ConvNumtoStrThousandSep(s.data.score);
         bestScore.text = Lib.ConvNumtoStrThousandSep(s.data.hiscore);
         totalCoins.text = Lib.ConvNumtoStrThousandSep(s.data.coins);
-        endGamePanel.SetActive(true);
+        endPanel.SetActive(true);
 
-        var rectTransform = coinsCount.GetComponent<RectTransform>();
-        Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(200, 0, 0), 3000);
+		var rectTransform = endPanel.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(0, 450, 0), 300);
     }
+
+	private void DisplayEndButtons(){
+		var rectTransformDino = dinoBtn.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransformDino, rectTransformDino.position, rectTransformDino.position + new Vector3(-100, 0, 0), 500);
+
+		var rectTransformBag = bagBtn.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransformBag, rectTransformBag.position, rectTransformBag.position + new Vector3(100, 0, 0), 500);
+	}
+
+	private void HideTopPanel(){
+		var rectTransformTopPanel = topPanel.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransformTopPanel, rectTransformTopPanel.position, rectTransformTopPanel.position + new Vector3(0, +150, 0), 500);
+	}
 
     Vector3 posstart;
 	float timeGameOver;
@@ -177,7 +195,9 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnButtonPress_Play()
     {
-        endGamePanel.SetActive(false);
+        endPanel.SetActive(false);
+//		var rectTransform = endPanel.GetComponent<RectTransform>();
+//		Lib.MoveAnimated(rectTransform, rectTransform.position, END_PANEL_HIDDEN_POSITION, 500);
     }
 	
 	void Awake()
@@ -226,6 +246,7 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		}
 		
 		if (isGameOver() && (Time.timeSinceLevelLoad - timeGameOver >= 0.8f) ) {
+			Debug.Log ("Reload scene");
 			Lib.ReloadScene();
 		}
 		

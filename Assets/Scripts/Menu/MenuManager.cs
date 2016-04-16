@@ -13,9 +13,7 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	public void OptionsMenu(bool clicked){
-		
-			optionsMenu.gameObject.SetActive (clicked);
-			menuManager.gameObject.SetActive (!clicked);
-		
+		optionsMenu.gameObject.SetActive (clicked);
+		menuManager.gameObject.SetActive (!clicked);
 	}
 }
