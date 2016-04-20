@@ -21,6 +21,8 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	public GameObject ExplosionPrefab;
 
     public GameObject endPanel;
+	public GameObject missionPanel;
+	public GameObject shopPanel;
 	private Vector3 END_PANEL_VISIBLE_POSITION = new Vector3(0,-100,0);
 	private Vector3 END_PANEL_HIDDEN_POSITION = new Vector3(0,-1000,0);
 
@@ -114,18 +116,36 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         newScore.text = Lib.ConvNumtoStrThousandSep(s.data.score);
         bestScore.text = Lib.ConvNumtoStrThousandSep(s.data.hiscore);
         totalCoins.text = Lib.ConvNumtoStrThousandSep(s.data.coins);
-        endPanel.SetActive(true);
 
-		var rectTransform = endPanel.GetComponent<RectTransform>();
-		Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(0, 450, 0), 300);
+		ShowPanel(endPanel);
     }
+
+	private void ShowPanel(GameObject gameObj){
+		gameObj.SetActive(true);
+		var rectTransform = gameObj.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(0, 1100, 0), 300);
+	}
+
+	private void HidePanel(GameObject gameObj){
+		var rectTransform = gameObj.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransform, rectTransform.position, rectTransform.position + new Vector3(0, -1100, 0), 300);
+		gameObj.SetActive(false);
+	}
 
 	private void DisplayEndButtons(){
 		var rectTransformDino = dinoBtn.GetComponent<RectTransform>();
-		Lib.MoveAnimated(rectTransformDino, rectTransformDino.position, rectTransformDino.position + new Vector3(-100, 0, 0), 500);
+		Lib.MoveAnimated(rectTransformDino, rectTransformDino.position, rectTransformDino.position + new Vector3(-300, 0, 0), 500);
 
 		var rectTransformBag = bagBtn.GetComponent<RectTransform>();
-		Lib.MoveAnimated(rectTransformBag, rectTransformBag.position, rectTransformBag.position + new Vector3(100, 0, 0), 500);
+		Lib.MoveAnimated(rectTransformBag, rectTransformBag.position, rectTransformBag.position + new Vector3(300, 0, 0), 500);
+	}
+
+	private void HideEndButtons(){
+		var rectTransformDino = dinoBtn.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransformDino, rectTransformDino.position, rectTransformDino.position + new Vector3(300, 0, 0), 500);
+
+		var rectTransformBag = bagBtn.GetComponent<RectTransform>();
+		Lib.MoveAnimated(rectTransformBag, rectTransformBag.position, rectTransformBag.position + new Vector3(-300, 0, 0), 500);
 	}
 
 	private void HideTopPanel(){
@@ -157,10 +177,10 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		if (isGameOver())
 			score.gameObject.SetActive(bHiScore ? b : true);
 		pausebtn.gameObject.SetActive(isPlaying() && !bIntroIsVisible);
-		closebtn.gameObject.SetActive(isPaused());
-		gameover.gameObject.SetActive( isGameOver());
-		paused.gameObject.SetActive(b && isPaused());
-		go.gameObject.SetActive(b && isPlaying() && bIntroIsVisible);
+		//closebtn.gameObject.SetActive(isPaused());
+		//gameover.gameObject.SetActive( isGameOver());
+		//paused.gameObject.SetActive(b && isPaused());
+		//go.gameObject.SetActive(b && isPlaying() && bIntroIsVisible);
 	}
 	
 	public void OnButtonPress_Close()
@@ -199,7 +219,27 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 //		var rectTransform = endPanel.GetComponent<RectTransform>();
 //		Lib.MoveAnimated(rectTransform, rectTransform.position, END_PANEL_HIDDEN_POSITION, 500);
     }
-	
+
+	public void OnButtonPress_ShopBack(){
+		HidePanel (shopPanel);
+		DisplayEndButtons ();
+	}
+
+	public void OnButtonPress_MissionBack(){
+		HidePanel (missionPanel);
+		DisplayEndButtons ();
+	}
+
+	public void OnButtonPress_OpenShop(){
+		HideEndButtons ();
+		ShowPanel(shopPanel);
+	}
+
+	public void OnButtonPress_OpenMission(){
+		HideEndButtons ();
+		ShowPanel(missionPanel);
+	}
+
 	void Awake()
 	{
 		pthis = this;
