@@ -100,12 +100,18 @@ public class Ball : MonoBehaviour
 		if (Lib.pythag(tappos,rb2.position)>=0.8f * tapTolerance)
 			return;
 		
-		float dx = -(tappos.x - rb2.position.x) * 500f;
+		float dx = -(tappos.x - rb2.position.x) * 100f;
 		rb2.AddForce(new Vector2(dx * xForceDirection, yForceDirection * 1f));
 		
 		screen_game game = screen_game.GetInstance();
 		game.doCollision(tappos);
-		game.increaseScore(1);
+		var score = game.increaseScore(1);
+
+        //if (score % 10 == 0 && xForceDirection <= 5)
+        //{
+        //    xForceDirection ++;
+        //}
+
 		playSound(kick);
 	}
 }

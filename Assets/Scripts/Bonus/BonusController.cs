@@ -25,12 +25,18 @@ public class BonusController : MonoBehaviour {
 	public GameObject bonusGravityHigh;
 
 	public GameObject coinPrefab;
+    public GameObject enemyPrefab;
 
 	private float maxWidth;
 	private float maxHeight;
 	private Renderer rend;
 
-	// Use this for initialization
+    public float MaxWidthForCoin
+    {
+        get { return maxWidth*bonusAreaWideness; }
+    }
+
+    // Use this for initialization
 	void Start () {
 
 		if (cam == null) {
@@ -42,7 +48,8 @@ public class BonusController : MonoBehaviour {
 		SetBonusArea (rend);
 
 //		Debug.Log ("Start spawning");
-		StartCoroutine (SpawnCoin ());
+		//StartCoroutine (SpawnCoin ());
+	    StartCoroutine(SpawnEnemy());
 	}
 
 	private void SetBonusArea(Renderer renderer){
@@ -52,7 +59,7 @@ public class BonusController : MonoBehaviour {
 		float ballWidth = rend.bounds.extents.x; 
 		float ballHeight = rend.bounds.extents.y;
 
-		maxWidth = (targetDimension.x - ballWidth) * bonusAreaWideness;
+		maxWidth = (targetDimension.x - ballWidth);
 		maxHeight = (targetDimension.y - ballHeight);
 	}
 
@@ -82,7 +89,7 @@ public class BonusController : MonoBehaviour {
 		//yield return new WaitForSeconds (5.0f);
 		while (screenController.isPlaying ()) {
 			Vector3 spawnPosition = new Vector3 (
-				Random.Range(-maxWidth, maxWidth), 
+				Random.Range(-MaxWidthForCoin, MaxWidthForCoin), 
 				Random.Range(-maxHeight, maxHeight), 
 				0f
 			);
@@ -95,6 +102,26 @@ public class BonusController : MonoBehaviour {
 
 		}
 	}
+
+    IEnumerator SpawnEnemy()
+    {
+        //yield return new WaitForSeconds (5.0f);
+        while (screenController.isPlaying())
+        {
+            Vector3 position = new Vector3(
+                -maxWidth,
+                Random.Range(-maxHeight, maxHeight),
+                0f
+            );
+
+            Quaternion rotation = Quaternion.identity;
+
+            var newEnemy = (GameObject) Instantiate(enemyPrefab, position, rotation);
+
+            yield return new WaitForSeconds(Random.Range(coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 1.0f));
+
+        }
+    }
 
 	GameObject SelectBonusToCreate(){
 		var random = Random.Range (0, 100);

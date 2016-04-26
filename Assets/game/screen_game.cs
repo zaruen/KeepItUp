@@ -57,13 +57,14 @@ public class screen_game : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		return rootsprite.gameObject;
 	}
 	
-	public void increaseScore(int deltaScore)
+	public long increaseScore(int deltaScore)
 	{
 		if (isGameOver())
-			return;
+			return 0;
 		SHARED s = SHARED.GetInstance();
 		s.data.score += deltaScore;
 		updateDisplay();
+	    return s.data.score;
 	}
 	
 	public void doCollision(Vector3 pos)
