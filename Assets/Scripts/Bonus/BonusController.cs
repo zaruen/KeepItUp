@@ -110,7 +110,8 @@ public class BonusController : MonoBehaviour {
         {
             Vector3 position = new Vector3(
                 -maxWidth,
-                Random.Range(-maxHeight, maxHeight),
+                //Random.Range(-maxHeight, maxHeight),
+                0f,
                 0f
             );
 
