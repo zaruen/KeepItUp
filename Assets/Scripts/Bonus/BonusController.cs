@@ -26,6 +26,8 @@ public class BonusController : MonoBehaviour {
 
 	public GameObject coinPrefab;
     public GameObject enemyPrefab;
+	public GameObject tomatoPrefab;
+	public GameObject trampoPrefab;
 
 	private float maxWidth;
 	private float maxHeight;
@@ -49,7 +51,9 @@ public class BonusController : MonoBehaviour {
 
 //		Debug.Log ("Start spawning");
 		//StartCoroutine (SpawnCoin ());
-	    StartCoroutine(SpawnEnemy());
+//	    StartCoroutine(SpawnEnemy());
+		StartCoroutine(SpawnTomato());
+		StartCoroutine(SpawnTrampo());
 	}
 
 	private void SetBonusArea(Renderer renderer){
@@ -61,6 +65,9 @@ public class BonusController : MonoBehaviour {
 
 		maxWidth = (targetDimension.x - ballWidth);
 		maxHeight = (targetDimension.y - ballHeight);
+
+		Debug.Log ("Width: " + maxWidth);
+		Debug.Log ("Height: " + maxHeight);
 	}
 
 	IEnumerator SpawnBonus(){
@@ -119,10 +126,52 @@ public class BonusController : MonoBehaviour {
 
             var newEnemy = (GameObject) Instantiate(enemyPrefab, position, rotation);
 
+
             yield return new WaitForSeconds(Random.Range(coinVisibleTime + timeBetweenCoin, coinVisibleTime + timeBetweenCoin + 1.0f));
 
         }
     }
+
+	IEnumerator SpawnTomato()
+	{
+		yield return new WaitForSeconds (15.0f);
+		while (screenController.isPlaying())
+		{
+			Vector3 position = new Vector3(
+				-maxWidth,
+				Random.Range(-maxHeight, maxHeight),
+				0f
+			);
+
+			Quaternion rotation = Quaternion.identity;
+
+			var newTomato = (GameObject) Instantiate(tomatoPrefab, position, rotation);
+
+
+			yield return new WaitForSeconds(Random.Range(5f, 30f));
+
+		}
+	}
+
+	IEnumerator SpawnTrampo()
+	{
+		yield return new WaitForSeconds (30.0f);
+		while (screenController.isPlaying())
+		{
+			Vector3 position = new Vector3(
+				Random.Range(-maxWidth, maxWidth),
+				-maxHeight + (maxHeight/10),
+				0f
+			);
+
+			Quaternion rotation = Quaternion.identity;
+
+			var newTrampo = (GameObject) Instantiate(trampoPrefab, position, rotation);
+
+			yield return new WaitForSeconds(Random.Range(10f, 30f));
+
+		}
+	}
 
 	GameObject SelectBonusToCreate(){
 		var random = Random.Range (0, 100);
